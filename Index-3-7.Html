@@ -1,0 +1,446 @@
+
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#101b32">
+<title>AK BROTHERS | AK TRANSPORT</title>
+<style>
+:root{--navy:#101b32;--gold:#e9bd63;--bg:#f3f5f9;--green:#138254;--red:#b93232}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);font-family:Arial,sans-serif;color:#182238}
+header{background:var(--navy);color:white;padding:22px 15px 18px;text-align:center}
+.logo{width:76px;height:76px;border:3px solid var(--gold);border-radius:19px;
+margin:auto auto 10px;display:flex;align-items:center;justify-content:center;
+color:var(--gold);font-size:30px;font-weight:900;transform:rotate(0deg)}
+.brand{font-size:24px;font-weight:900;letter-spacing:2px;color:var(--gold)}
+.by{font-size:13px;margin-top:5px}
+.tag{font-size:11px;letter-spacing:1px;color:#dbe1ec;margin-top:8px}
+nav{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;padding:12px;background:#fff}
+nav button{background:#e9edf4;color:#172643;padding:12px 5px;font-size:13px}
+nav button.active{background:var(--navy);color:var(--gold)}
+main{padding:13px;max-width:850px;margin:auto}
+.page{display:none}.page.active{display:block}
+.card{background:#fff;border-radius:14px;padding:16px;margin-bottom:13px;
+box-shadow:0 2px 9px #1726430b}
+h2{font-size:19px;margin:0 0 13px}
+h3{font-size:15px;margin:12px 0}
+label{display:block;font-size:13px;font-weight:bold;margin:12px 0 6px}
+input,select,textarea{width:100%;padding:12px;border:1px solid #cbd3df;
+border-radius:9px;background:white;font-size:16px;color:#182238}
+textarea{min-height:70px}
+button{border:0;border-radius:9px;padding:12px;font-size:14px;
+font-weight:bold;cursor:pointer}
+.primary{background:var(--navy);color:white;width:100%;margin-top:13px}
+.gold{background:var(--gold);color:var(--navy)}
+.light{background:#e9edf4;color:var(--navy)}
+.danger{background:#ffe8e8;color:#a02020}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.stat{background:#fff;padding:14px;border-radius:12px;min-width:0}
+.stat small{display:block;color:#647087;font-size:12px}
+.stat strong{display:block;font-size:19px;margin-top:8px;overflow-wrap:anywhere}
+.green{color:var(--green)}.red{color:var(--red)}
+.result{background:#eef4fc;border-radius:10px;padding:13px;margin-top:12px;
+line-height:1.9;overflow-wrap:anywhere}
+.item{border-bottom:1px solid #e4e8ef;padding:13px 0;line-height:1.7;
+overflow-wrap:anywhere}
+.item:last-child{border-bottom:0}
+.muted{font-size:12px;color:#6c7689}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pill{display:inline-block;border-radius:20px;background:#edf1f7;padding:4px 9px;font-size:12px}
+footer{text-align:center;padding:22px;color:#6c7689;font-size:12px}
+@media(max-width:380px){nav{grid-template-columns:repeat(2,1fr)}.brand{font-size:21px}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">AK</div>
+  <div class="brand">AK BROTHERS</div>
+  <div class="by">by Kishore Sai</div>
+  <div class="tag">TRANSPORT ACCOUNTING SYSTEM</div>
+</header>
+
+<nav id="nav">
+  <button class="active" data-page="home">🏠 முகப்பு</button>
+  <button data-page="loads">🚚 லோடு</button>
+  <button data-page="salary">👨‍✈️ சம்பளம்</button>
+  <button data-page="commission">🤝 கமிஷன்</button>
+  <button data-page="expenses">⛽ செலவுகள்</button>
+  <button data-page="records">📒 பதிவுகள்</button>
+</nav>
+
+<main>
+<section id="home" class="page active">
+  <div class="card">
+    <h2>வணக்கம், கிஷோர்!</h2>
+    <div>உங்கள் போக்குவரத்துக் கணக்குகள் அனைத்தும் ஒரே இடத்தில்.</div>
+    <button class="primary" onclick="showPage('loads')">＋ புதிய லோடு பதிவு</button>
+  </div>
+
+  <div class="cards">
+    <div class="stat"><small>மொத்த லோடு வசூல்</small><strong id="dashIncome">₹0</strong></div>
+    <div class="stat"><small>டிரைவர் சம்பளம்</small><strong id="dashSalary">₹0</strong></div>
+    <div class="stat"><small>கமிஷன் செலவு</small><strong id="dashCommission">₹0</strong></div>
+    <div class="stat"><small>இதர செலவுகள்</small><strong id="dashExpenses">₹0</strong></div>
+  </div>
+
+  <div class="card" style="margin-top:13px">
+    <h2>📊 மொத்தக் கணக்கு</h2>
+    <div class="result">
+      மொத்த வரவு: <b id="reportIncome">₹0</b><br>
+      சம்பளச் செலவு: <b id="reportSalary">₹0</b><br>
+      கமிஷன்: <b id="reportCommission">₹0</b><br>
+      இதர செலவுகள்: <b id="reportExpenses">₹0</b><br>
+      <hr>
+      நிகர லாபம் / நஷ்டம்:
+      <h2 id="netProfit" class="green">₹0</h2>
+      <small>பதிவு செய்யப்பட்ட வரவு மற்றும் செலவுகளின் அடிப்படையிலான கணக்கு.</small>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🎙️ குரல் உதவி</h2>
+    <p class="muted">உங்கள் பிரவுசர் ஆதரித்தால் தமிழிலோ ஆங்கிலத்திலோ பேசலாம்.</p>
+    <button class="primary" onclick="startVoice()">🎤 பேசத் தொடங்கு</button>
+    <div id="voiceText" class="result">குரல் உதவி தொடங்கவில்லை.</div>
+    <button class="light" onclick="speakHelp()">🔊 கணக்குகளைப் பற்றிக் கேளுங்கள்</button>
+  </div>
+</section>
+
+<section id="loads" class="page">
+  <div class="card">
+    <h2>🚚 புதிய லோடு பதிவு</h2>
+    <label>தேதி</label><input id="loadDate" type="date">
+    <label>லோடு / ரசீது எண்</label><input id="loadNo" placeholder="உதா: LD-001">
+    <label>லோடு கொடுத்த டிரான்ஸ்போர்ட்</label><input id="loadCompany" placeholder="கம்பெனி பெயர்">
+    <label>டிரைவர் பெயர்</label><input id="loadDriver" placeholder="டிரைவர் பெயர்">
+    <label>எங்கிருந்து?</label><input id="loadFrom" placeholder="புறப்படும் இடம்">
+    <label>எங்கே செல்ல வேண்டும்?</label><input id="loadTo" placeholder="செல்லும் இடம்">
+    <label>வசூல் தொகை (₹)</label><input id="loadAmount" type="number" min="0" placeholder="0">
+    <label>குறிப்புகள்</label><textarea id="loadNotes" placeholder="கூடுதல் விவரம்"></textarea>
+    <button class="primary" onclick="saveLoad()">லோடு கணக்கைச் சேமி</button>
+  </div>
+</section>
+
+<section id="salary" class="page">
+  <div class="card">
+    <h2>👨‍✈️ டிரைவர் சம்பளக் கணக்கு</h2>
+    <label>டிரைவர் பெயர்</label><input id="salDriver" placeholder="பெயர்">
+    <label>லோடு வசூல் தொகை (₹)</label><input id="salCollection" type="number" min="0" placeholder="50000">
+    <label>சம்பள விகிதம்</label>
+    <select id="salRate"><option value="15">15%</option><option value="16">16%</option><option value="17">17%</option></select>
+    <label>முன்பு கொடுத்த அட்வான்ஸ் (₹)</label><input id="salAdvance" type="number" min="0" value="0">
+    <label>ஏற்கெனவே கொடுத்த சம்பளம் (₹)</label><input id="salPaid" type="number" min="0" value="0">
+    <button class="primary" onclick="calcSalary()">சம்பளத்தைக் கணக்கிடு</button>
+    <div class="result" id="salResult">விவரங்களை உள்ளிடவும்.</div>
+    <button class="primary" onclick="saveSalary()">சம்பளப் பதிவைச் சேமி</button>
+  </div>
+</section>
+
+<section id="commission" class="page">
+  <div class="card">
+    <h2>🤝 டிரான்ஸ்போர்ட் கமிஷன்</h2>
+    <label>கம்பெனி பெயர்</label><input id="comCompany" placeholder="டிரான்ஸ்போர்ட் பெயர்">
+    <label>லோடு / ரசீது எண்</label><input id="comLoad" placeholder="லோடு எண்">
+    <label>வசூல் தொகை (₹)</label><input id="comCollection" type="number" min="0" placeholder="50000">
+    <label>கமிஷன் விகிதம்</label>
+    <select id="comRate">
+      <option value="1">1 பைசா (1%)</option>
+      <option value="2">2 பைசா (2%)</option>
+      <option value="3" selected>3 பைசா (3%)</option>
+      <option value="4">4 பைசா (4%)</option>
+      <option value="5">5 பைசா (5%)</option>
+      <option value="6">6 பைசா (6%)</option>
+      <option value="7">7 பைசா (7%)</option>
+    </select>
+    <label>கமிஷன் நிலை</label>
+    <select id="comStatus"><option value="பாக்கி">பாக்கி</option><option value="கொடுத்துவிட்டோம்">கொடுத்துவிட்டோம்</option></select>
+    <button class="primary" onclick="calcCommission()">கமிஷனைக் கணக்கிடு</button>
+    <div id="comResult" class="result">விவரங்களை உள்ளிடவும்.</div>
+    <button class="primary" onclick="saveCommission()">கமிஷன் பதிவைச் சேமி</button>
+  </div>
+</section>
+
+<section id="expenses" class="page">
+  <div class="card">
+    <h2>⛽ செலவுகள் பதிவு</h2>
+    <label>தேதி</label><input id="expDate" type="date">
+    <label>செலவு வகை</label>
+    <select id="expType">
+      <option>டீசல்</option><option>டோல்</option><option>வாகனப் பராமரிப்பு</option>
+      <option>டிரைவர் இதர செலவு</option><option>உணவு / படி</option><option>மற்ற செலவு</option>
+    </select>
+    <label>லாரி எண் / விவரம்</label><input id="expVehicle" placeholder="வாகன எண் அல்லது விவரம்">
+    <label>செலவுத் தொகை (₹)</label><input id="expAmount" type="number" min="0" placeholder="0">
+    <label>குறிப்புகள்</label><textarea id="expNotes" placeholder="எதற்கான செலவு?"></textarea>
+    <button class="primary" onclick="saveExpense()">செலவைச் சேமி</button>
+  </div>
+</section>
+
+<section id="records" class="page">
+  <div class="card">
+    <h2>📒 அனைத்து பதிவுகளும்</h2>
+    <input id="search" placeholder="பெயர், கம்பெனி, லோடு எண் தேடவும்..." oninput="renderRecords()">
+    <div class="row" style="margin-top:10px">
+      <button class="light" onclick="exportData()">⬇ காப்புப் பிரதி</button>
+      <button class="light" onclick="document.getElementById('importFile').click()">⬆ மீட்டெடு</button>
+    </div>
+    <input id="importFile" type="file" accept=".json,application/json" style="display:none" onchange="importData(event)">
+    <div id="recordList" style="margin-top:12px"></div>
+  </div>
+  <div class="card">
+    <h3>⚠️ முக்கிய அறிவிப்பு</h3>
+    <p class="muted">இந்தப் பதிப்பு தரவை இந்த மொபைல் பிரவுசரில் சேமிக்கிறது. வேறு மொபைலில் தானாக வராது. காப்புப் பிரதியை அடிக்கடி பதிவிறக்கி பாதுகாப்பாக வைத்துக்கொள்ளுங்கள்.</p>
+  </div>
+</section>
+</main>
+
+<footer>AK BROTHERS by Kishore Sai · AK TRANSPORT ACCOUNTING</footer>
+
+<script>
+const DBKEY = "akBrothersTransportAccounts_v1";
+let data = [];
+
+try {
+  const saved = JSON.parse(localStorage.getItem(DBKEY) || "[]");
+  if (Array.isArray(saved)) data = saved;
+} catch(e) { data = []; }
+
+const $ = id => document.getElementById(id);
+const val = id => $(id).value.trim();
+const amount = id => {
+  const n = Number($(id).value);
+  return Number.isFinite(n) && n >= 0 ? n : 0;
+};
+const money = n => "₹" + Number(n || 0).toLocaleString("en-IN", {
+  minimumFractionDigits: 2, maximumFractionDigits: 2
+});
+const today = new Date().toISOString().slice(0,10);
+$("loadDate").value = today;
+$("expDate").value = today;
+
+function showPage(id) {
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  $(id).classList.add("active");
+  document.querySelectorAll("nav button").forEach(b =>
+    b.classList.toggle("active", b.dataset.page === id));
+  if(id === "home") updateDashboard();
+  if(id === "records") renderRecords();
+  window.scrollTo(0,0);
+}
+document.querySelectorAll("nav button").forEach(b =>
+  b.addEventListener("click", () => showPage(b.dataset.page)));
+
+function persist() {
+  try {
+    localStorage.setItem(DBKEY, JSON.stringify(data));
+    updateDashboard();
+    renderRecords();
+    return true;
+  } catch(e) {
+    alert("சேமிக்க முடியவில்லை. மொபைலில் இடவசதியைச் சரிபார்க்கவும்.");
+    return false;
+  }
+}
+function addRecord(record) {
+  data.unshift({id:Date.now(), date:today, ...record});
+  if(persist()) alert("பதிவு வெற்றிகரமாகச் சேமிக்கப்பட்டது.");
+}
+function saveLoad() {
+  if(!val("loadCompany") || amount("loadAmount") <= 0) {
+    alert("டிரான்ஸ்போர்ட் பெயரையும் சரியான வசூல் தொகையையும் உள்ளிடுங்கள்."); return;
+  }
+  addRecord({
+    type:"load", date:val("loadDate") || today,
+    loadNo:val("loadNo"), company:val("loadCompany"),
+    driver:val("loadDriver"), from:val("loadFrom"), to:val("loadTo"),
+    amount:amount("loadAmount"), notes:val("loadNotes")
+  });
+}
+function salaryCalc() {
+  const collection = amount("salCollection");
+  const rate = Number($("salRate").value);
+  const earned = collection * rate / 100;
+  const advance = amount("salAdvance");
+  const paid = amount("salPaid");
+  return {collection,rate,earned,advance,paid,balance:earned-advance-paid};
+}
+function calcSalary() {
+  const s = salaryCalc();
+  $("salResult").innerHTML =
+    "வசூல்: <b>"+money(s.collection)+"</b><br>"+
+    "சம்பள விகிதம்: <b>"+s.rate+"%</b><br>"+
+    "மொத்த சம்பளம்: <b>"+money(s.earned)+"</b><br>"+
+    "அட்வான்ஸ் கழித்தது: "+money(s.advance)+"<br>"+
+    "ஏற்கெனவே கொடுத்த சம்பளம்: "+money(s.paid)+"<hr>"+
+    "மீதித் தொகை: <h2>"+money(s.balance)+"</h2>"+
+    (s.balance < 0 ? "⚠️ சம்பளத்தைவிட அதிகத் தொகை ஏற்கெனவே கொடுக்கப்பட்டுள்ளது." : "");
+}
+function saveSalary() {
+  if(!val("salDriver") || amount("salCollection") <= 0) {
+    alert("டிரைவர் பெயர் மற்றும் வசூல் தொகையை உள்ளிடுங்கள்."); return;
+  }
+  const s = salaryCalc();
+  addRecord({type:"salary", driver:val("salDriver"), ...s});
+}
+function commissionCalc() {
+  const collection = amount("comCollection");
+  const rate = Number($("comRate").value);
+  return {collection,rate,amount:collection*rate/100,status:val("comStatus")};
+}
+function calcCommission() {
+  const c = commissionCalc();
+  $("comResult").innerHTML =
+    "வசூல் தொகை: <b>"+money(c.collection)+"</b><br>"+
+    "கமிஷன் விகிதம்: <b>"+c.rate+"%</b><br>"+
+    "கமிஷன் தொகை: <h2>"+money(c.amount)+"</h2>"+
+    "நிலை: <b>"+c.status+"</b>";
+}
+function saveCommission() {
+  if(!val("comCompany") || amount("comCollection") <= 0) {
+    alert("கம்பெனி பெயர் மற்றும் வசூல் தொகையை உள்ளிடுங்கள்."); return;
+  }
+  addRecord({type:"commission",company:val("comCompany"),
+    loadNo:val("comLoad"),...commissionCalc()});
+}
+function saveExpense() {
+  if(amount("expAmount") <= 0) {
+    alert("சரியான செலவுத் தொகையை உள்ளிடுங்கள்."); return;
+  }
+  addRecord({type:"expense",date:val("expDate")||today,
+    category:val("expType"),vehicle:val("expVehicle"),
+    amount:amount("expAmount"),notes:val("expNotes")});
+}
+function totals() {
+  const loads = data.filter(r=>r.type==="load").reduce((s,r)=>s+r.amount,0);
+  const salary = data.filter(r=>r.type==="salary").reduce((s,r)=>s+r.earned,0);
+  const commission = data.filter(r=>r.type==="commission").reduce((s,r)=>s+r.amount,0);
+  const expenses = data.filter(r=>r.type==="expense").reduce((s,r)=>s+r.amount,0);
+  return {loads,salary,commission,expenses,profit:loads-salary-commission-expenses};
+}
+function updateDashboard() {
+  const t = totals();
+  $("dashIncome").textContent = money(t.loads);
+  $("dashSalary").textContent = money(t.salary);
+  $("dashCommission").textContent = money(t.commission);
+  $("dashExpenses").textContent = money(t.expenses);
+  $("reportIncome").textContent = money(t.loads);
+  $("reportSalary").textContent = money(t.salary);
+  $("reportCommission").textContent = money(t.commission);
+  $("reportExpenses").textContent = money(t.expenses);
+  $("netProfit").textContent = money(t.profit)+(t.profit<0?" (நஷ்டம்)":"");
+  $("netProfit").className = t.profit < 0 ? "red" : "green";
+}
+function esc(s) {
+  return String(s ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
+}
+function recordTitle(r) {
+  if(r.type==="load") return "🚚 லோடு — "+(r.company||"");
+  if(r.type==="salary") return "👨‍✈️ சம்பளம் — "+(r.driver||"");
+  if(r.type==="commission") return "🤝 கமிஷன் — "+(r.company||"");
+  return "⛽ செலவு — "+(r.category||"");
+}
+function recordDetails(r) {
+  if(r.type==="load") return "லோடு எண்: "+esc(r.loadNo||"—")+" | வசூல்: "+money(r.amount)+
+    "<br>டிரைவர்: "+esc(r.driver||"—")+" | "+esc(r.from||"—")+" → "+esc(r.to||"—");
+  if(r.type==="salary") return "வசூல்: "+money(r.collection)+" | விகிதம்: "+r.rate+
+    "% | சம்பளம்: "+money(r.earned)+"<br>அட்வான்ஸ்: "+money(r.advance)+
+    " | முன்பு கொடுத்தது: "+money(r.paid)+" | மீதி: "+money(r.balance);
+  if(r.type==="commission") return "லோடு: "+esc(r.loadNo||"—")+
+    " | வசூல்: "+money(r.collection)+" | விகிதம்: "+r.rate+
+    "% | கமிஷன்: "+money(r.amount)+"<br>நிலை: "+esc(r.status);
+  return esc(r.category)+" | "+esc(r.vehicle||"—")+" | தொகை: "+money(r.amount)+
+    "<br>"+esc(r.notes||"");
+}
+function renderRecords() {
+  const q = val("search").toLowerCase();
+  const list = data.filter(r => JSON.stringify(r).toLowerCase().includes(q));
+  if(!list.length) {
+    $("recordList").innerHTML = "<p class='muted'>பதிவுகள் எதுவும் இல்லை.</p>"; return;
+  }
+  $("recordList").innerHTML = list.map(r =>
+    "<div class='item'><b>"+recordTitle(r)+"</b><br>"+
+    "<small>"+esc(r.date||"")+"</small><br>"+recordDetails(r)+
+    "<br><button class='danger' onclick='deleteRecord("+Number(r.id)+")'>பதிவை நீக்கு</button></div>"
+  ).join("");
+}
+function deleteRecord(id) {
+  if(!confirm("இந்தப் பதிவை நிரந்தரமாக நீக்க வேண்டுமா?")) return;
+  data = data.filter(r=>r.id!==id);
+  persist();
+}
+function exportData() {
+  const blob = new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = "AK-BROTHERS-Accounts-Backup.json";
+  a.click(); URL.revokeObjectURL(url);
+}
+function importData(event) {
+  const file = event.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const imported = JSON.parse(reader.result);
+      if(!Array.isArray(imported) || !imported.every(r=>r && r.type && r.id)) {
+        throw new Error("Invalid backup");
+      }
+      if(!confirm("தற்போதைய பதிவுகளுடன் காப்புப் பிரதியைச் சேர்க்கவா?")) return;
+      const ids = new Set(data.map(r=>String(r.id)));
+      imported.forEach(r=>{if(!ids.has(String(r.id)))data.push(r);});
+      persist();
+      alert("காப்புப் பிரதி மீட்டெடுக்கப்பட்டது.");
+    } catch(e) { alert("இந்தக் காப்புப் பிரதி சரியான வடிவில் இல்லை."); }
+    event.target.value="";
+  };
+  reader.readAsText(file);
+}
+function speakHelp() {
+  const msg = "Welcome to AK Brothers Transport Accounts. You can record loads, driver salary, transport commission and expenses. Your dashboard shows estimated profit.";
+  if(!("speechSynthesis" in window)) {
+    alert("இந்தப் பிரவுசரில் குரல் வாசிப்பு வசதி இல்லை."); return;
+  }
+  const utterance = new SpeechSynthesisUtterance(msg);
+  utterance.lang = "en-IN";
+  speechSynthesis.speak(utterance);
+}
+function startVoice() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!SR) {
+    $("voiceText").textContent = "இந்தப் பிரவுசர் குரல் அடையாளம் காண்பதை ஆதரிக்கவில்லை. Chrome-ல் முயற்சி செய்யுங்கள்.";
+    return;
+  }
+  const recognition = new SR();
+  recognition.lang = "ta-IN";
+  recognition.onresult = e => {
+    const text = e.results[0][0].transcript;
+    $("voiceText").textContent = "நீங்கள் சொன்னது: " + text;
+    const t = text.toLowerCase();
+    if(t.includes("லோடு")) showPage("loads");
+    else if(t.includes("சம்பளம்") || t.includes("டிரைவர்")) showPage("salary");
+    else if(t.includes("கமிஷன்")) showPage("commission");
+    else if(t.includes("செலவு") || t.includes("டீசல்")) showPage("expenses");
+    else if(t.includes("பதிவு") || t.includes("கணக்கு")) showPage("records");
+    else $("voiceText").innerHTML += "<br>இந்தச் சொல்லுக்கான நேரடி செயல் இன்னும் அமைக்கப்படவில்லை.";
+  };
+  recognition.onerror = () => $("voiceText").textContent =
+    "குரலைப் புரிந்துகொள்ள முடியவில்லை. மைக்ரோஃபோன் அனுமதியைச் சரிபார்க்கவும்.";
+  recognition.start();
+}
+function calcAllOnInput() {
+  ["salCollection","salRate","salAdvance","salPaid"].forEach(id=>$(id).addEventListener("input",calcSalary));
+  ["comCollection","comRate","comStatus"].forEach(id=>$(id).addEventListener("input",calcCommission));
+}
+calcAllOnInput();
+calcSalary();
+calcCommission();
+updateDashboard();
+renderRecords();
+</script>
+</body>
+</html>
